@@ -1,0 +1,292 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Happy Birthday!</title>
+    
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Dancing+Script:wght@700&family=Quicksand:wght@400;600&display=swap" rel="stylesheet">
+
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            /* Pastel Yellow to Lavender Gradient */
+            background: linear-gradient(135deg, #fdfbf1 0%, #e6e6fa 100%); 
+            height: 100vh;
+            overflow: hidden;
+            display: flex;
+            flex-direction: column;
+            justify-content: center;
+            align-items: center;
+            font-family: 'Quicksand', sans-serif;
+            /* DARKER TEXT COLOR */
+            color: #3a2c4d; 
+        }
+
+        /* Glassmorphism Container */
+        .container {
+            text-align: center;
+            z-index: 10;
+            padding: 3rem;
+            max-width: 800px;
+            width: 90%;
+            background: rgba(255, 255, 255, 0.35);
+            border-radius: 25px;
+            backdrop-filter: blur(12px);
+            -webkit-backdrop-filter: blur(12px);
+            border: 1px solid rgba(255, 255, 255, 0.6);
+            box-shadow: 0 8px 32px rgba(138, 43, 226, 0.1);
+            transition: transform 0.3s ease;
+        }
+
+        .container:hover {
+            transform: translateY(-5px);
+            box-shadow: 0 12px 40px rgba(138, 43, 226, 0.15);
+        }
+
+        h1 {
+            font-family: 'Dancing Script', cursive;
+            font-size: 4.5rem;
+            /* DARKER GRADIENT FOR HEADING */
+            background: linear-gradient(45deg, #D98C1A, #6A4BC0);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            margin-bottom: 1rem;
+            line-height: 1.2;
+            opacity: 0;
+            animation: fadeInUpscale 1.5s forwards 0.5s;
+            padding: 0 10px; /* Ensures italic font doesn't get cut off */
+        }
+
+        .subtitle {
+            font-size: 1.4rem;
+            /* DARKER SUBTITLE COLOR */
+            color: #524163;
+            margin-bottom: 2.5rem;
+            font-weight: 600;
+            min-height: 1.6em;
+        }
+
+        /* Cute Button Styling */
+        .next-button {
+            padding: 1rem 3.5rem;
+            font-size: 1.2rem;
+            font-family: 'Quicksand', sans-serif;
+            font-weight: 600;
+            background: linear-gradient(45deg, #FCE38A, #E0BBE4);
+            /* DARKER BUTTON TEXT */
+            color: #3a2c4d;
+            border: none;
+            border-radius: 50px;
+            cursor: pointer;
+            box-shadow: 0 4px 15px rgba(224, 187, 228, 0.5);
+            transition: all 0.3s ease;
+            opacity: 0;
+            animation: fadeIn 1s forwards 2.5s;
+        }
+
+        .next-button:hover {
+            transform: scale(1.05);
+            box-shadow: 0 6px 20px rgba(224, 187, 228, 0.7);
+            background: linear-gradient(45deg, #E0BBE4, #FCE38A);
+        }
+
+        /* Audio Player Styling */
+        .audio-controls {
+            position: fixed;
+            bottom: 30px;
+            right: 30px;
+            background: rgba(255, 255, 255, 0.6);
+            backdrop-filter: blur(5px);
+            padding: 12px 20px;
+            border-radius: 50px;
+            display: flex;
+            align-items: center;
+            z-index: 100;
+            box-shadow: 0 4px 15px rgba(0,0,0,0.05);
+            border: 1px solid rgba(255,255,255,0.8);
+            transition: opacity 0.3s;
+        }
+
+        .audio-controls button {
+            background: none;
+            border: none;
+            font-size: 1.2rem;
+            cursor: pointer;
+            margin-right: 15px;
+            filter: grayscale(0.5);
+            transition: 0.3s;
+        }
+
+        .audio-controls button:hover {
+            transform: scale(1.1);
+            filter: grayscale(0);
+        }
+
+        /* Custom Range Slider */
+        input[type=range] {
+            accent-color: #6A4BC0; /* Darker lavender slider color */
+            width: 80px;
+        }
+
+        /* Floating Animation Elements */
+        .floating-element {
+            position: absolute;
+            z-index: 1;
+            pointer-events: none;
+            opacity: 0.7;
+        }
+
+        /* Animations */
+        @keyframes fadeInUpscale {
+            0% { opacity: 0; transform: scale(0.8) translateY(20px); }
+            100% { opacity: 1; transform: scale(1) translateY(0); }
+        }
+
+        @keyframes fadeIn {
+            from { opacity: 0; transform: translateY(10px); }
+            to { opacity: 1; transform: translateY(0); }
+        }
+
+        /* Typewriter Cursor */
+        .cursor {
+            display: inline-block;
+            width: 2px;
+            height: 1.2em;
+            background-color: #6A4BC0; /* Darker cursor */
+            margin-left: 2px;
+            animation: blink 1s infinite;
+            vertical-align: middle;
+        }
+
+        @keyframes blink {
+            0%, 100% { opacity: 1; }
+            50% { opacity: 0; }
+        }
+
+        /* Mobile Responsive */
+        @media (max-width: 768px) {
+            h1 { font-size: 3rem; }
+            .container { padding: 2rem 1.5rem; width: 85%; }
+            .subtitle { font-size: 1.1rem; }
+        }
+    </style>
+</head>
+<body>
+
+    <div class="container">
+        <h1>Happy Birthday Babygirll!!</h1>
+        
+        <div class="subtitle">
+            <span id="typewriter-text"></span><span class="cursor"></span>
+        </div>
+        
+        <button class="next-button" onclick="goToNextPage()">Let's Go! ➜</button>
+    </div>
+
+    <div class="audio-controls">
+        <button id="play-pause">▶️</button>
+        <input type="range" id="volume" min="0" max="1" step="0.1" value="0.5">
+    </div>
+
+    <audio id="birthday-song" loop>
+        <source src="song.mp3" type="audio/mp3"> 
+    </audio>
+
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/gsap/3.11.4/gsap.min.js"></script>
+
+    <script>
+        // --- TYPEWRITER EFFECT UPDATED ---
+        // I added punctuation to make it look cleaner, as requested by "aesthetic design"
+        const textToType = "So it's your birthday, huh? Let's take a stroll.";
+        const typeWriterElement = document.getElementById('typewriter-text');
+        let i = 0;
+
+        function typeWriter() {
+            if (i < textToType.length) {
+                typeWriterElement.innerHTML += textToType.charAt(i);
+                i++;
+                setTimeout(typeWriter, 50); // Speed of typing
+            }
+        }
+        // Start typing after a short delay
+        setTimeout(typeWriter, 1500);
+
+
+        // --- AUDIO PLAYER ---
+        const audio = document.getElementById('birthday-song');
+        const playPauseBtn = document.getElementById('play-pause');
+        const volumeControl = document.getElementById('volume');
+        let isPlaying = false;
+
+        audio.volume = 0.5;
+
+        playPauseBtn.addEventListener('click', () => {
+            if (isPlaying) {
+                audio.pause();
+                playPauseBtn.innerHTML = '▶️';
+            } else {
+                audio.play().catch(e => console.log("Interaction needed first"));
+                playPauseBtn.innerHTML = '⏸️';
+            }
+            isPlaying = !isPlaying;
+        });
+
+        volumeControl.addEventListener('input', () => {
+            audio.volume = volumeControl.value;
+        });
+
+
+        // --- NAVIGATION ---
+        function goToNextPage() {
+            gsap.to('.container', {
+                scale: 0.9,
+                opacity: 0,
+                duration: 0.5,
+                onComplete: () => {
+                    // Make sure this file exists!
+                    window.location.href = "memorylane.html"; 
+                }
+            });
+        }
+
+
+        // --- FLOATING HEARTS & STARS ---
+        function createFloatingElements() {
+            const elements = ['❤️', '✨', '💜', '☁️']; 
+            
+            const element = document.createElement('div');
+            element.className = 'floating-element';
+            element.innerText = elements[Math.floor(Math.random() * elements.length)];
+            
+            // Random styling
+            element.style.left = Math.random() * 100 + 'vw';
+            element.style.top = '100vh';
+            element.style.fontSize = (Math.random() * 20 + 15) + 'px'; 
+            
+            document.body.appendChild(element);
+
+            // Animate
+            gsap.to(element, {
+                y: -window.innerHeight - 100,
+                x: (Math.random() * 100 - 50),
+                rotation: Math.random() * 180,
+                duration: Math.random() * 5 + 8, // Slower, dreamier speed
+                ease: "power1.out",
+                onComplete: () => { element.remove(); }
+            });
+        }
+
+        // Create a new element every 400ms
+        setInterval(createFloatingElements, 400);
+
+    </script>
+</body>
+</html>

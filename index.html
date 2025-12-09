@@ -1,0 +1,180 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Who are you?</title>
+    
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Dancing+Script:wght@700&family=Quicksand:wght@400;600&display=swap" rel="stylesheet">
+
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            /* Matches the theme of the main page */
+            background: linear-gradient(135deg, #fdfbf1 0%, #e6e6fa 100%); 
+            height: 100vh;
+            overflow: hidden;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            font-family: 'Quicksand', sans-serif;
+            color: #3a2c4d; 
+        }
+
+        .login-container {
+            text-align: center;
+            padding: 3rem;
+            width: 90%;
+            max-width: 500px;
+            background: rgba(255, 255, 255, 0.35);
+            border-radius: 25px;
+            backdrop-filter: blur(12px);
+            -webkit-backdrop-filter: blur(12px);
+            border: 1px solid rgba(255, 255, 255, 0.6);
+            box-shadow: 0 8px 32px rgba(138, 43, 226, 0.1);
+        }
+
+        h1 {
+            font-family: 'Dancing Script', cursive;
+            font-size: 3.5rem;
+            background: linear-gradient(45deg, #D98C1A, #6A4BC0);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            margin-bottom: 2rem;
+            padding: 0 10px;
+        }
+
+        input {
+            width: 100%;
+            padding: 15px 20px;
+            margin-bottom: 15px;
+            border-radius: 50px;
+            border: 2px solid rgba(255, 255, 255, 0.5);
+            background: rgba(255, 255, 255, 0.6);
+            font-family: 'Quicksand', sans-serif;
+            font-size: 1.1rem;
+            color: #3a2c4d;
+            outline: none;
+            transition: 0.3s;
+            text-align: center;
+        }
+
+        input:focus {
+            border-color: #E0BBE4;
+            background: rgba(255, 255, 255, 0.9);
+            box-shadow: 0 0 15px rgba(224, 187, 228, 0.3);
+        }
+
+        /* Styling the hint placeholder */
+        ::placeholder {
+            color: #887a9c;
+            font-size: 0.9rem;
+            font-style: italic;
+        }
+
+        button {
+            padding: 12px 40px;
+            font-size: 1.2rem;
+            font-family: 'Quicksand', sans-serif;
+            font-weight: 600;
+            background: linear-gradient(45deg, #FCE38A, #E0BBE4);
+            color: #3a2c4d;
+            border: none;
+            border-radius: 50px;
+            cursor: pointer;
+            box-shadow: 0 4px 15px rgba(224, 187, 228, 0.5);
+            transition: transform 0.2s, box-shadow 0.2s;
+            margin-top: 10px;
+        }
+
+        button:hover {
+            transform: scale(1.05);
+            box-shadow: 0 6px 20px rgba(224, 187, 228, 0.7);
+        }
+
+        #message {
+            margin-top: 20px;
+            font-weight: 600;
+            font-size: 1.2rem;
+            min-height: 1.5rem;
+            transition: 0.3s;
+        }
+
+        /* Animation classes */
+        .shake {
+            animation: shake 0.5s;
+        }
+
+        @keyframes shake {
+            0% { transform: translateX(0); }
+            25% { transform: translateX(-10px); }
+            50% { transform: translateX(10px); }
+            75% { transform: translateX(-10px); }
+            100% { transform: translateX(0); }
+        }
+    </style>
+</head>
+<body>
+
+    <div class="login-container">
+        <h1>Who are you?</h1>
+        
+        <input type="password" id="passwordInput" placeholder="Hint: This is what you are...">
+        <br>
+        <button onclick="checkPassword()">Enter</button>
+        
+        <p id="message"></p>
+    </div>
+
+    <script>
+        function checkPassword() {
+            const input = document.getElementById('passwordInput');
+            const message = document.getElementById('message');
+            const container = document.querySelector('.login-container');
+            
+            // Get value and convert to lowercase so "Swan+Monkey" or "swan+monkey" both work
+            // .trim() removes spaces if she accidentally adds one at the end
+            const password = input.value.toLowerCase().trim();
+
+            if (password === "swan+monkey") {
+                // SUCCESS
+                message.style.color = "#6A4BC0"; // Nice purple
+                message.innerHTML = "Welcome home honeyy! ✨";
+                
+                // Wait 2 seconds so she can read the message, then redirect
+                setTimeout(() => {
+                    // THIS CONNECTS TO YOUR PREVIOUS PAGE
+                    window.location.href = "surprise.html";
+                }, 2000);
+
+            } else {
+                // FAILURE
+                message.style.color = "#D9534F"; // Reddish color for error
+                message.innerHTML = "Nice try bitch 💅";
+                
+                // Add shake animation
+                container.classList.add('shake');
+                
+                // Remove shake class after animation finishes so it can shake again next time
+                setTimeout(() => {
+                    container.classList.remove('shake');
+                }, 500);
+            }
+        }
+
+        // Allow pressing "Enter" key to submit
+        document.getElementById("passwordInput").addEventListener("keypress", function(event) {
+            if (event.key === "Enter") {
+                checkPassword();
+            }
+        });
+    </script>
+</body>
+</html>

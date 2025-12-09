@@ -1,0 +1,403 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>For My Lil Baby</title>
+    
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Dancing+Script:wght@700&family=Quicksand:wght@500;700&display=swap" rel="stylesheet">
+    
+    <script src="https://cdn.jsdelivr.net/npm/canvas-confetti@1.6.0/dist/confetti.browser.min.js"></script>
+
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            /* Animated Gradient Background */
+            background: linear-gradient(-45deg, #ff9a9e, #fad0c4, #a18cd1, #fbc2eb, #8fd3f4);
+            background-size: 400% 400%;
+            animation: gradientBG 15s ease infinite;
+            min-height: 100vh;
+            font-family: 'Quicksand', sans-serif;
+            color: #3a2c4d;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            padding-bottom: 50px;
+        }
+
+        @keyframes gradientBG {
+            0% { background-position: 0% 50%; }
+            50% { background-position: 100% 50%; }
+            100% { background-position: 0% 50%; }
+        }
+
+        /* Main Glass Container */
+        .main-container {
+            margin-top: 5vh;
+            width: 90%;
+            max-width: 800px;
+            background: rgba(255, 255, 255, 0.45);
+            border-radius: 25px;
+            backdrop-filter: blur(12px);
+            -webkit-backdrop-filter: blur(12px);
+            border: 1px solid rgba(255, 255, 255, 0.6);
+            box-shadow: 0 8px 32px rgba(0, 0, 0, 0.1);
+            padding: 3rem;
+            text-align: center;
+            opacity: 0;
+            animation: fadeIn 1.5s ease forwards;
+        }
+
+        .header h1 {
+            font-family: 'Dancing Script', cursive;
+            font-size: 3.5rem;
+            color: #4a3b5c;
+            margin-bottom: 1.5rem;
+            line-height: 1.2;
+        }
+
+        /* The Letter Text Area */
+        .letter-box {
+            text-align: left;
+            font-family: 'Quicksand', sans-serif; /* NON-CURSIVE */
+            font-weight: 500;
+            font-size: 1.15rem;
+            line-height: 1.8;
+            color: #2c2c2c;
+            background: rgba(255, 255, 255, 0.5);
+            padding: 2rem;
+            border-radius: 15px;
+            margin-bottom: 2rem;
+            border: 1px dashed rgba(161, 140, 209, 0.5);
+            min-height: 300px; /* Keeps box size stable while typing */
+        }
+
+        /* Blinking Cursor for Typewriter */
+        .cursor {
+            display: inline-block;
+            width: 2px;
+            height: 1.2em;
+            background-color: #4a3b5c;
+            margin-left: 2px;
+            animation: blink 0.7s infinite;
+            vertical-align: bottom;
+        }
+
+        @keyframes blink {
+            0%, 100% { opacity: 1; }
+            50% { opacity: 0; }
+        }
+
+        /* Voucher Button */
+        .voucher-btn {
+            background: linear-gradient(45deg, #ff9a9e, #a18cd1);
+            color: white;
+            padding: 15px 40px;
+            font-size: 1.3rem;
+            font-family: 'Quicksand', sans-serif;
+            font-weight: 700;
+            border: none;
+            border-radius: 50px;
+            cursor: pointer;
+            box-shadow: 0 5px 15px rgba(161, 140, 209, 0.4);
+            transition: transform 0.2s, box-shadow 0.2s;
+            animation: pulse 2s infinite;
+            
+            /* Hidden initially until typing finishes */
+            opacity: 0; 
+            pointer-events: none;
+            transition: opacity 1s ease;
+        }
+        
+        .voucher-btn.visible {
+            opacity: 1;
+            pointer-events: auto;
+        }
+
+        .voucher-btn:hover {
+            transform: scale(1.05);
+            box-shadow: 0 8px 25px rgba(161, 140, 209, 0.6);
+        }
+
+        /* Modal (Pop-up) Styles */
+        .modal-overlay {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background: rgba(0, 0, 0, 0.5);
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            z-index: 1000;
+            opacity: 0;
+            pointer-events: none;
+            transition: opacity 0.3s ease;
+            backdrop-filter: blur(5px);
+        }
+
+        .modal-overlay.active {
+            opacity: 1;
+            pointer-events: auto;
+        }
+
+        .ticket {
+            background: white;
+            width: 90%;
+            max-width: 400px;
+            border-radius: 20px;
+            padding: 2rem;
+            text-align: center;
+            transform: scale(0.8);
+            transition: transform 0.3s ease;
+            position: relative;
+            border: 2px dashed #ff9a9e;
+            background-image: radial-gradient(#fdfbf1 20%, transparent 20%),
+            radial-gradient(#fdfbf1 20%, transparent 20%);
+            background-size: 20px 20px;
+            background-position: 0 0, 10px 10px;
+        }
+
+        .modal-overlay.active .ticket {
+            transform: scale(1);
+        }
+
+        .ticket h2 {
+            font-family: 'Dancing Script', cursive;
+            font-size: 2.5rem;
+            color: #ff6ec4;
+            margin-bottom: 1rem;
+        }
+
+        .ticket p {
+            font-size: 1.2rem;
+            font-weight: 700;
+            color: #555;
+            margin-bottom: 1.5rem;
+        }
+
+        .ticket-icon {
+            font-size: 4rem;
+            margin-bottom: 1rem;
+            display: block;
+        }
+
+        .close-btn {
+            background: #a18cd1;
+            color: white;
+            border: none;
+            padding: 10px 25px;
+            border-radius: 20px;
+            cursor: pointer;
+            font-weight: 700;
+        }
+
+        /* Back Button */
+        .btn-back { 
+            display: inline-block;
+            margin-top: 2rem;
+            text-decoration: none;
+            background: rgba(255,255,255,0.6); 
+            color: #3a2c4d; 
+            padding: 10px 20px;
+            border-radius: 30px;
+            font-weight: 600;
+            transition: 0.3s;
+        }
+        .btn-back:hover { background: white; transform: scale(1.05); }
+
+        /* Audio Controls */
+        .audio-controls {
+            position: fixed;
+            bottom: 20px;
+            right: 20px;
+            background: rgba(255, 255, 255, 0.9);
+            backdrop-filter: blur(5px);
+            padding: 10px 15px;
+            border-radius: 50px;
+            display: flex;
+            align-items: center;
+            z-index: 100;
+            box-shadow: 0 4px 15px rgba(0,0,0,0.2);
+        }
+        .audio-controls button {
+            background: none;
+            border: none;
+            font-size: 1.5rem;
+            cursor: pointer;
+            margin-right: 10px;
+        }
+        input[type=range] { accent-color: #ff6ec4; width: 80px; }
+
+        @keyframes fadeIn { from { opacity: 0; transform: translateY(20px); } to { opacity: 1; transform: translateY(0); } }
+        @keyframes pulse { 0% { transform: scale(1); } 50% { transform: scale(1.05); box-shadow: 0 0 20px rgba(255, 105, 180, 0.6); } 100% { transform: scale(1); } }
+        @keyframes floatUp { to { transform: translateY(-120vh) rotate(360deg); } }
+
+        .floating-element {
+            position: fixed;
+            top: 100vh;
+            font-size: 20px;
+            pointer-events: none;
+            opacity: 0.6;
+            animation: floatUp 15s linear infinite;
+        }
+        
+        @media (max-width: 768px) {
+            .header h1 { font-size: 2.5rem; }
+            .main-container { padding: 1.5rem; }
+            .letter-box { font-size: 1rem; padding: 1.5rem; }
+        }
+    </style>
+</head>
+<body>
+
+    <div class="main-container">
+        <div class="header">
+            <h1>For my Dearest Lil Baby :)</h1>
+        </div>
+
+        <div class="letter-box">
+            <span id="typewriter"></span><span class="cursor"></span>
+        </div>
+
+        <button class="voucher-btn" id="redeemBtn" onclick="openVoucher()">Redeem Birthday Voucher 🎟️</button>
+        <br>
+        <a href="cake.html" class="btn-back">← Back to Cake</a>
+    </div>
+
+    <div class="modal-overlay" id="voucherModal">
+        <div class="ticket">
+            <span class="ticket-icon">🎁</span>
+            <h2>Voucher Redeemed!</h2>
+            <hr style="border: 1px dashed #ccc; margin: 15px 0;">
+            <p>This voucher entitles the bearer to:</p>
+            <h3 style="color: #6a4c93; font-size: 1.5rem; margin-bottom: 20px;">Free Kisses & Hugs<br>For A Lifetime! ♾️❤️</h3>
+            <p style="font-size: 0.9rem; color: #888;">*No expiration date. Non-transferable. Valid only for you.*</p>
+            <button class="close-btn" onclick="closeVoucher()">Yayyy! 🥰</button>
+        </div>
+    </div>
+
+    <div class="audio-controls">
+        <button id="play-pause">▶️</button>
+        <input type="range" id="volume" min="0" max="1" step="0.1" value="0.5">
+    </div>
+
+    <audio id="bg-music" loop>
+        <source src="letter_song.mp3" type="audio/mp3">
+    </audio>
+
+    <script>
+        // --- TYPEWRITER DATA ---
+        // I put formatting tags in the string. The script detects them and adds them instantly.
+        const letterContent = `Time sure does flies honey...and its finally here. <br><br><strong style="color:#d9534f; font-size:1.3rem;">YOUR BIRTHDAYYY!!!</strong><br><br>I can't stress enough on how gratefull I am to have you in my life.<br><br>As time passes i realize I never wanted you but I <strong style="color:#6a4c93;">NEEDED</strong> you cuz you are everything I've always asked for. I used to be a scaredy cat but for you I wanna stand up...I wanna be strong, I wanna thrive, I wanna dream, I wanna hope.<br><br>Honey, I love you so much! I love you more than anything...I love you more than any fight we have, any materialistic thing i have, anything small or big...infact I love you more than yourself lol. cuz with each day passing I will love you more.<br><br>Thank you for existing honey...infact I'm grateful i exist in the same world as you. U may feel its exagerattion but its true. I Love you with all my heart...my everything!<br><br>May god bless you and <strong style="color:#6a4c93;">KEEP SMILING!! :))</strong><br><br><span style="font-family:'Dancing Script',cursive; font-size:2rem; display:block; text-align:center; color:#ff6ec4; margin-top:10px;">HAPPYY BIRTHDAYYYYYY ❤️</span>`;
+
+        const typeWriterElement = document.getElementById('typewriter');
+        const redeemBtn = document.getElementById('redeemBtn');
+
+        let i = 0;
+        let isTag = false;
+        let text = "";
+
+        function typeWriter() {
+            if (i < letterContent.length) {
+                text = letterContent.slice(0, i + 1);
+                typeWriterElement.innerHTML = text;
+
+                // Check if current char is start of a tag
+                if (letterContent.charAt(i) === '<') isTag = true;
+                if (letterContent.charAt(i) === '>') isTag = false;
+
+                if (isTag) {
+                    i++;
+                    typeWriter(); // Skip delays for tags
+                } else {
+                    i++;
+                    setTimeout(typeWriter, 40); // Speed of typing (lower = faster)
+                }
+            } else {
+                // Typing finished
+                document.querySelector('.cursor').style.display = 'none';
+                redeemBtn.classList.add('visible'); // Show the button
+            }
+        }
+        
+        // Start typing after 1 second
+        setTimeout(typeWriter, 1000);
+
+        // --- VOUCHER LOGIC ---
+        function openVoucher() {
+            const modal = document.getElementById('voucherModal');
+            modal.classList.add('active');
+            
+            // Trigger Confetti
+            var duration = 3 * 1000;
+            var animationEnd = Date.now() + duration;
+            var defaults = { startVelocity: 30, spread: 360, ticks: 60, zIndex: 2000 };
+
+            function randomInOut(min, max) {
+                return Math.random() * (max - min) + min;
+            }
+
+            var interval = setInterval(function() {
+                var timeLeft = animationEnd - Date.now();
+
+                if (timeLeft <= 0) {
+                    return clearInterval(interval);
+                }
+
+                var particleCount = 50 * (timeLeft / duration);
+                confetti(Object.assign({}, defaults, { particleCount, origin: { x: randomInOut(0.1, 0.3), y: Math.random() - 0.2 } }));
+                confetti(Object.assign({}, defaults, { particleCount, origin: { x: randomInOut(0.7, 0.9), y: Math.random() - 0.2 } }));
+            }, 250);
+        }
+
+        function closeVoucher() {
+            document.getElementById('voucherModal').classList.remove('active');
+        }
+
+        // --- MUSIC PLAYER ---
+        const audio = document.getElementById('bg-music');
+        const playPauseBtn = document.getElementById('play-pause');
+        const volumeControl = document.getElementById('volume');
+        let isPlaying = false;
+
+        audio.volume = 0.5;
+
+        playPauseBtn.addEventListener('click', () => {
+            if (isPlaying) {
+                audio.pause();
+                playPauseBtn.innerHTML = '▶️';
+            } else {
+                audio.play();
+                playPauseBtn.innerHTML = '⏸️';
+            }
+            isPlaying = !isPlaying;
+        });
+
+        volumeControl.addEventListener('input', () => {
+            audio.volume = volumeControl.value;
+        });
+
+        // --- BACKGROUND EMOJIS ---
+        function createEmoji() {
+            const emojis = ['❤️', '💌', '🌸', '✨', '💕', '🥰'];
+            const el = document.createElement('div');
+            el.className = 'floating-element';
+            el.innerText = emojis[Math.floor(Math.random() * emojis.length)];
+            el.style.left = Math.random() * 100 + 'vw';
+            el.style.animationDuration = (Math.random() * 10 + 10) + 's';
+            document.body.appendChild(el);
+            setTimeout(() => { el.remove(); }, 20000);
+        }
+        setInterval(createEmoji, 1000);
+    </script>
+</body>
+</html>
